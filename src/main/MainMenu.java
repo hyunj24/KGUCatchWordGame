@@ -25,7 +25,7 @@ public class MainMenu {
 		main.setLayout(new GridLayout(5, 1));
 		
 		//사용자 정보 버튼 이미지 추가
-		ImageIcon userInfoIcon = new ImageIcon("imgs/gameWindow.jpg");
+		ImageIcon userInfoIcon = new ImageIcon("imgs/userInfo.jpg");
 		JButton userInfoButton = new JButton();
 		userInfoButton.setIcon(userInfoIcon);
 		JLabel userInfoLabel = new JLabel("사용자 정보"); // 사용자 정보를 라벨로 추가
@@ -36,9 +36,9 @@ public class MainMenu {
 		userInfoButton.add(Box.createHorizontalGlue());
 		
 		//랭킹 버튼 이미지 추가
-		ImageIcon rankingIcon = new ImageIcon("imgs/gameWindow.jpg");
+		ImageIcon rankingIcon = new ImageIcon("imgs/ranking.jpg");
 		JButton rankingButton = new JButton();
-		rankingButton.setIcon(userInfoIcon);
+		rankingButton.setIcon(rankingIcon);
 		JLabel rankingLabel = new JLabel("랭킹"); 
 		rankingLabel.setFont(new Font("돋움", Font.BOLD, 28));
 		rankingButton.setLayout(new BoxLayout(rankingButton, BoxLayout.X_AXIS));
@@ -50,7 +50,7 @@ public class MainMenu {
 		ImageIcon gameModeIcon = new ImageIcon("imgs/gameWindow.jpg");
 		JButton gameModeButton = new JButton();
 		gameModeButton.setIcon(gameModeIcon);
-		JLabel gameModeLabel = new JLabel("게임모드"); 
+		JLabel gameModeLabel = new JLabel("게임 START"); 
 		gameModeLabel.setFont(new Font("돋움", Font.BOLD, 28));
 		gameModeButton.setLayout(new BoxLayout(gameModeButton, BoxLayout.X_AXIS));
 		gameModeButton.add(Box.createHorizontalGlue());
@@ -58,9 +58,9 @@ public class MainMenu {
 		gameModeButton.add(Box.createHorizontalGlue());
 		
 		//게임설명 버튼 이미지 추가
-		ImageIcon explainGameIcon = new ImageIcon("imgs/gameWindow.jpg");
+		ImageIcon explainGameIcon = new ImageIcon("imgs/explainGame.jpg");
 		JButton explainGameButton = new JButton();
-		explainGameButton.setIcon(userInfoIcon);
+		explainGameButton.setIcon(explainGameIcon);
 		JLabel explainGameLabel = new JLabel("게임설명"); 
 		explainGameLabel.setFont(new Font("돋움", Font.BOLD, 28));
 		explainGameButton.setLayout(new BoxLayout(explainGameButton, BoxLayout.X_AXIS));
@@ -69,7 +69,7 @@ public class MainMenu {
 		explainGameButton.add(Box.createHorizontalGlue());
 		
 		//게임종료 버튼 이미지 추가
-		ImageIcon exitGameIcon = new ImageIcon("imgs/gameWindow.jpg");
+		ImageIcon exitGameIcon = new ImageIcon("imgs/exitGame.jpg");
 		JButton exitGameButton = new JButton();
 		exitGameButton.setIcon(exitGameIcon);
 		JLabel exitGameLabel = new JLabel("게임 종료");
@@ -295,7 +295,8 @@ public class MainMenu {
                 + "게임 종료 후 최종 점수와 함께 여러분의 최고 점수가 갱신됩니다. 친구들과 점수를 비교하며 최고 기록을 세워보세요!"
                 + "</html>", SwingConstants.CENTER);
 
-
+		explainLabel.setFont(new Font("돋음", Font.BOLD, 17));
+		
 		JButton backButton = backButton();
 
 		explain.add(explainLabel, BorderLayout.CENTER);

@@ -115,8 +115,8 @@ public class Catchword extends JPanel implements ActionListener {
 		problemLabel = new JLabel("문제: 1 / " + MAX_ROUNDS);
 		problemLabel.setBackground(new Color(255, 0, 0, 0));
 
-		stageLabel.setFont(new Font("돋움", Font.BOLD, 16));
-		problemLabel.setFont(new Font("돋움", Font.BOLD, 16));
+		stageLabel.setFont(new Font("돋움", Font.BOLD, 24));
+		problemLabel.setFont(new Font("돋움", Font.BOLD, 24));
 		infoPanel.add(stageLabel);
 		infoPanel.add(problemLabel);
 
@@ -143,9 +143,9 @@ public class Catchword extends JPanel implements ActionListener {
 		hintButton.setEnabled(selectedLevel >= 3 && !hintUsed);
 		addTimeButton.setEnabled(selectedLevel >= 3 && !hintUsed);
 
-		pauseButton.setFont(new Font("돋움", Font.BOLD, 11));
-		hintButton.setFont(new Font("돋움", Font.BOLD, 11));
-		addTimeButton.setFont(new Font("돋움", Font.BOLD, 11));
+		pauseButton.setFont(new Font("돋움", Font.BOLD, 13));
+		hintButton.setFont(new Font("돋움", Font.BOLD, 13));
+		addTimeButton.setFont(new Font("돋움", Font.BOLD, 13));
 		Dimension buttonSize = new Dimension(90, 40);
 		pauseButton.setPreferredSize(buttonSize);
 		hintButton.setPreferredSize(buttonSize);
@@ -195,7 +195,7 @@ public class Catchword extends JPanel implements ActionListener {
 		add(topPanel);
 
 		timerLabel = new JLabel("남은 시간: " + time + "초");
-		timerLabel.setFont(new Font("돋움", Font.BOLD, 18));
+		timerLabel.setFont(new Font("돋움", Font.BOLD, 22));
 		timerLabel.setForeground(Color.white);
 		timerLabel.setSize(width, 20);
 		timerLabel.setLocation(10, height - 60);
