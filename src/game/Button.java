@@ -10,7 +10,9 @@ public class Button extends BasicButtonUI {
     	super.paint(g, c);
         AbstractButton b = (AbstractButton) c;
         Graphics2D g2 = (Graphics2D) g.create();
-
+        b.setOpaque(false);  // 버튼의 배경색을 투명하게 설정
+        b.setBorder(null);   // 버튼의 테두리를 투명하게 설정
+        
         // 버튼의 모양과 배경 색상 설정
        // g2.setColor(new Color(8, 136, 248));
         
