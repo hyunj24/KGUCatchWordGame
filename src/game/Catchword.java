@@ -9,18 +9,31 @@ import game.Button;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Random;
 import java.util.Scanner;
+import java.util.Set;
 
 import main.*;
 
 public class Catchword extends JPanel implements ActionListener {
 	Image gameBackGround = new ImageIcon("imgs/gameWindow.jpg").getImage();
+	ImageIcon lockIcon = new ImageIcon(
+			new ImageIcon("imgs/lock.png").getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH));
+	ImageIcon pencilIcon = new ImageIcon(
+			new ImageIcon("imgs/pencil.png").getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH));
+	ImageIcon swichIcon = new ImageIcon(
+			new ImageIcon("imgs/swich.png").getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH));
 	Random random = new Random();
 	// 파일에서 단어 로드
+	private JButton penButton;
+	private JButton swichButton;
+	private Set<JButton> lockedButtons = new HashSet<>();
 	private ArrayList<String> words = loadWordsFromFile("words.txt");
 	private int currentWordIndex;
 	private String targetWord;
@@ -31,6 +44,8 @@ public class Catchword extends JPanel implements ActionListener {
 	private ArrayList<JLabel> targetLabels;
 	private JPanel topPanel;
 	private JPanel gridPanel;
+	private JProgressBar timeBar;
+	private JPanel darkOverlay;
 
 	private JButton[][] buttons;
 	private int currentIndex = 0;
@@ -58,6 +73,9 @@ public class Catchword extends JPanel implements ActionListener {
 	private JButton addTimeButton;
 
 	private boolean itemUsedThisRound = false;
+
+	private JLabel keyLabel;
+	private Timer lightTimer;
 
 	private static final String[] EXTRA_CHARS = { "가", "나", "다", "라", "마", "바", "사", "아", "자", "차", "카", "타", "파", "하",
 			"강", "난", "당", "락", "만", "방", "산", "알", "장", "착", "칼", "탕", "팔", "한" };
@@ -194,14 +212,9 @@ public class Catchword extends JPanel implements ActionListener {
 		topPanel.setLocation(0, height / 10);
 		add(topPanel);
 
-		timerLabel = new JLabel("남은 시간: " + time + "초");
-		timerLabel.setFont(new Font("돋움", Font.BOLD, 22)); // 글씨 희미해 지는 것은 폰트 때문인걸로 추정
-		timerLabel.setForeground(Color.white);
-		timerLabel.setSize(width, 30); // Label 사이즈 조정
-		timerLabel.setLocation(10, height - 70); // Label 위치 조정
-		add(timerLabel);
-
 		buttons = new JButton[Psize][Psize];
+		JPanel canvas = new JPanel(null);
+		canvas.setBackground(new Color(255, 0, 0, 0));
 		gridPanel = new JPanel();
 		gridPanel.setLayout(new GridLayout(Psize, Psize, 10, 10));
 		gridPanel.setBackground(new Color(255, 0, 0, 0));
@@ -221,9 +234,170 @@ public class Catchword extends JPanel implements ActionListener {
 				buttons[i][j].setUI(new Button());
 			}
 		}
+		penButton = new JButton(pencilIcon); // 버튼에 열쇠 이미지 추가
+		penButton.setBounds(getWidth() - 100, 20, 50, 50); // 우측 상단 위치
+		penButton.setBorder(BorderFactory.createEmptyBorder()); // 버튼 테두리 제거
+		penButton.setContentAreaFilled(false); // 배경 제거
+		penButton.addActionListener(e -> unlockAllButtons()); // 클릭 시 동작 정의
+
+		add(penButton); // 패널에 추가
+
+		swichButton = new JButton(swichIcon); // 버튼에 열쇠 이미지 추가
+		swichButton.setBounds(getWidth() - 100, 80, 50, 50); // 우측 상단 위치
+		swichButton.setBorder(BorderFactory.createEmptyBorder()); // 버튼 테두리 제거
+		swichButton.setContentAreaFilled(false); // 배경 제거
+		swichButton.addActionListener(e -> {
+		    turnOnLights(); // 화면 밝게 설정
+		});
+
+
+		add(swichButton); // 패널에 추가
+		
+		startRandomFeatureTimer();
+		timeBar();
 		shuffleButtons();
 		startTimer();
+		//RandomEraser();
+		createDarkOverlay();
+		//startLightTimer();
 
+	}
+	private void startRandomFeatureTimer() {
+		if (selectedLevel < 2) {
+	        return; // 기능은 3, 4, 5 단계에서만 실행
+	    }
+	    Timer randomFeatureTimer = new Timer(5000, new ActionListener() {
+	        @Override
+	        public void actionPerformed(ActionEvent e) {
+	            // 0 또는 1 중 하나를 랜덤으로 선택
+	            int randomFeature = random.nextInt(2);
+
+	            if (randomFeature == 0) {
+	                // 불 끄기 실행
+	                turnOffLights();
+	            } else {
+	                // 잠금 기능 실행
+	                RandomEraser();
+	            }
+	        }
+	    });
+	    randomFeatureTimer.start();
+	}
+	private void startLightTimer() {
+	    lightTimer = new Timer(5000, new ActionListener() {
+	        @Override
+	        public void actionPerformed(ActionEvent e) {
+	            turnOffLights(); // 5초마다 화면 어둡게
+	        }
+	    });
+	    lightTimer.start();
+	}
+	private void RandomEraser() {
+	    if (selectedLevel < 2) {
+	        return; // 기능은 3, 4, 5 단계에서만 실행
+	    }
+
+	    ArrayList<JButton> availableButtons = new ArrayList<>();
+	    for (int i = 0; i < Psize; i++) {
+	        for (int j = 0; j < Psize; j++) {
+	            if (buttons[i][j].isEnabled()) {
+	                availableButtons.add(buttons[i][j]);
+	            }
+	        }
+	    }
+
+	    if (availableButtons.size() < 3) {
+	        // 남아있는 버튼이 3개 미만인 경우 처리하지 않음
+	        return;
+	    }
+
+	    // 버튼들을 무작위로 섞고, 상위 3개의 버튼을 잠금 처리
+	    Collections.shuffle(availableButtons);
+	    for (int k = 0; k < 3; k++) {
+	        JButton button = availableButtons.get(k);
+
+	        // 원래 텍스트 저장
+	        String originalText = button.getText();
+	        button.putClientProperty("originalText", originalText);
+
+	        // 잠금 상태로 변경
+	        button.setText(""); // 텍스트 제거
+	        button.setIcon(lockIcon);
+	        button.setEnabled(false); // 버튼 비활성화
+	    }
+
+	    revalidate();
+	    repaint();
+	}
+
+	 private JButton switchButton;
+
+    
+     
+  private void createDarkOverlay() {
+         darkOverlay = new JPanel() {
+             @Override
+             protected void paintComponent(Graphics g) {
+                 super.paintComponent(g);
+                 g.setColor(new Color(0, 0, 0, 150)); // 반투명 검은색
+                 g.fillRect(0, 0, getWidth(), getHeight());
+             }
+         };
+         darkOverlay.setBounds(0, 0, getWidth(), getHeight());
+         darkOverlay.setVisible(false); // 처음역 비활성화
+         darkOverlay.setOpaque(false);
+         add(darkOverlay);
+     }
+
+     // 화면 얼륨게 설정
+     private void turnOffLights() {
+         darkOverlay.setVisible(true);
+         // 모든 텍스트 보이지 않도록 보용
+         for (JLabel label : targetLabels) {
+             label.setForeground(new Color(0, 0, 0, 0));
+         }
+     }
+
+     // 화면 발게 설정
+     private void turnOnLights() {
+         darkOverlay.setVisible(false);
+         for (JLabel label : targetLabels) {
+             label.setForeground(Color.BLACK); // 발게 설정시 무조건 표시
+         }
+     }
+	 private void unlockAllButtons() {
+		    for (int i = 0; i < Psize; i++) {
+		        for (int j = 0; j < Psize; j++) {
+		            JButton button = buttons[i][j];
+		            if (button.getIcon() == lockIcon) {
+		                // 잠금 해제: 원래 텍스트 복원 및 아이콘 제거
+		                button.setText((String) button.getClientProperty("originalText"));
+		                button.setIcon(null);
+		                button.setEnabled(true);
+		            }
+		        }
+		    }
+		    revalidate();
+		    repaint();
+		}
+	private void timeBar() {
+		int margin = 20; // 화면의 좌우 여백
+		int barWidth = getWidth() - (2 * margin); // 화면 너비에서 여백을 뺀 너비
+		int barHeight = 30; // 바의 높이
+		int barX = margin; // 왼쪽 여백
+		int barY = getHeight() - 100; // 바의 세로 위치
+		UIManager.put("ProgressBar.selectionForeground", Color.BLACK); // 진행 바 텍스트 색상
+		UIManager.put("ProgressBar.selectionBackground", Color.BLACK);
+		timeBar = new JProgressBar(0, time); // 초기 범위 설정 (0 ~ 최대 시간)
+		timeBar.setValue(time); // 초기값 설정
+		timeBar.setForeground(Color.green); // 진행 색상
+		timeBar.setStringPainted(true); // 텍스트 표시 활성화
+		timeBar.setFont(new Font("돋움", Font.BOLD, 18));
+		timeBar.setBackground(Color.DARK_GRAY);
+		timeBar.setBounds(barX, barY, barWidth, barHeight); // 위치 및 크기 설정
+		timeBar.setString("남은 시간: " + time + "초"); // 텍스트로 시간 표시
+
+		add(timeBar); // 패널에 추가
 	}
 
 	// 게임 일시정지 기능 메서드
@@ -350,7 +524,17 @@ public class Catchword extends JPanel implements ActionListener {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				time--;
-				timerLabel.setText("남은 시간: " + time + "초");
+				timeBar.setValue(time);
+				timeBar.setString("남은 시간: " + time + "초"); // 시간 텍스트 업데이트
+
+				// 시간에 따른 색상 변화
+				if (time <= 10) {
+					timeBar.setForeground(Color.RED);
+				} else if (time <= 20) {
+					timeBar.setForeground(Color.ORANGE);
+				} else {
+					timeBar.setForeground(Color.GREEN);
+				}
 
 				if (time == 0) {
 					timer.stop();
@@ -364,13 +548,47 @@ public class Catchword extends JPanel implements ActionListener {
 
 	private void addTime(int plusTime) {
 		time += plusTime;
-		timerLabel.setText("남은 시간: " + time + "초 + " + plusTime + "초");
+		if (time > timeBar.getMaximum()) {
+			time = timeBar.getMaximum();
+		}
+		timeBar.setValue(time);
 
+		// 시간 변경 내용을 표시
+		timeBar.setString("남은 시간: " + time + "초 + " + plusTime + "초");
+
+		// 2초 후에 원래의 시간 표시로 돌아옴
+		Timer displayTimer = new Timer(2000, new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				timeBar.setString("남은 시간: " + time + "초");
+				((Timer) e.getSource()).stop();
+			}
+		});
+		displayTimer.setRepeats(false);
+		displayTimer.start();
 	}
 
 	private void penaltyTime(int minusTime) {
 		time -= minusTime;
-		timerLabel.setText("남은 시간: " + time + "초 - " + minusTime + "초");
+		if (time < 0) {
+			time = 0;
+		}
+		timeBar.setValue(time);
+
+		// 시간 변경 내용을 표시
+		timeBar.setString("남은 시간: " + time + "초 - " + minusTime + "초");
+
+		// 2초 후에 원래의 시간 표시로 돌아옴
+		Timer displayTimer = new Timer(2000, new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				timeBar.setString("남은 시간: " + time + "초");
+				((Timer) e.getSource()).stop();
+			}
+		});
+		displayTimer.setRepeats(false);
+		displayTimer.start();
+
 	}
 
 	private void resetGame() {
@@ -493,17 +711,31 @@ public class Catchword extends JPanel implements ActionListener {
 
 			penaltyTime(minusTime);
 
-			Color originalColor = this.getBackground();
-			this.setBackground(Color.RED);
+			JFrame mainFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
+			if (mainFrame != null) {
+				JLayeredPane layeredPane = mainFrame.getLayeredPane();
+				JPanel redOverlay = new JPanel() {
+					@Override
+					protected void paintComponent(Graphics g) {
+						super.paintComponent(g);
+						g.setColor(new Color(255, 0, 0, 100)); // 반투명 빨간색, 투명도 100
+						g.fillRect(0, 0, getWidth(), getHeight());
+					}
+				};
+				redOverlay.setOpaque(false); // 패널 자체는 불투명하지 않게 설정
+				redOverlay.setBounds(0, 0, mainFrame.getWidth(), mainFrame.getHeight());
+				layeredPane.add(redOverlay, JLayeredPane.PALETTE_LAYER);
 
-			Timer flashTimer = new Timer(500, new ActionListener() {
-				@Override
-				public void actionPerformed(ActionEvent evt) {
-					setBackground(originalColor);
-				}
-			});
-			flashTimer.setRepeats(false);
-			flashTimer.start();
+				Timer flashTimer = new Timer(500, new ActionListener() {
+					@Override
+					public void actionPerformed(ActionEvent evt) {
+						layeredPane.remove(redOverlay);
+						layeredPane.repaint();
+					}
+				});
+				flashTimer.setRepeats(false);
+				flashTimer.start();
+			}
 
 			Toolkit.getDefaultToolkit().beep();
 
@@ -512,7 +744,7 @@ public class Catchword extends JPanel implements ActionListener {
 		}
 
 		// 모든 버튼의 상태를 초기화하여 틀린 상태에서만 빨간색 테두리를 유지
-		//shuffleButtons();
+		// shuffleButtons();
 	}
 
 	private void showFinalScore(int totalScore) {
@@ -527,19 +759,19 @@ public class Catchword extends JPanel implements ActionListener {
 
 		// 남은 시간 점수 계산 (남은 시간 1초당 1점)
 		int timeScore = time; // 남은 시간이 1초당 1점씩 추가됨
-		
-		//r에서 원래 최고기록 점수와 레벨
+
+		// r에서 원래 최고기록 점수와 레벨
 		int bestScore = r.getBestScore();
 		int bestLevel = r.getBestScoreLevel();
-		
+
 		// 최종 점수 계산
 		finalScore = roundScore + timeScore;
 
 		// 플레이어 기록 업데이트
 		r.updateBestScoreAndLevel(finalScore, selectedLevel + 1);
 
-		ScorePanel scorePanel = new ScorePanel(time, finalScore, 
-				selectedLevel+1, roundsCompleted, bestScore, bestLevel);
+		ScorePanel scorePanel = new ScorePanel(time, finalScore, selectedLevel + 1, roundsCompleted, bestScore,
+				bestLevel);
 		JFrame mainFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
 		if (mainFrame instanceof MainFrame) {
 			((MainFrame) mainFrame).setContentPane(scorePanel);
