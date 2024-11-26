@@ -195,7 +195,7 @@ public class Catchword extends JPanel implements ActionListener {
 		add(topPanel);
 
 		timerLabel = new JLabel("남은 시간: " + time + "초");
-		timerLabel.setFont(new Font("돋움", Font.BOLD, 22));
+		timerLabel.setFont(new Font("돋움", Font.BOLD, 22)); // 글씨 희미해 지는 것은 폰트 때문인걸로 추정
 		timerLabel.setForeground(Color.white);
 		timerLabel.setSize(width, 30); // Label 사이즈 조정
 		timerLabel.setLocation(10, height - 70); // Label 위치 조정

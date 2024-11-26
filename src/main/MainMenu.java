@@ -224,8 +224,8 @@ public class MainMenu {
 		return userInfoPanel;
 	}
 
-	// 랭킹 창
-	public JPanel RankingPanel() {
+	// 랭킹 창 (수정 요청)
+	public JPanel RankingPanel() { 
 		JPanel rank = new JPanel() {
 			protected void paintComponent(Graphics g) {
 				Image background = new ImageIcon("imgs/Login.jpg").getImage();
