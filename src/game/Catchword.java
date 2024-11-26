@@ -197,8 +197,8 @@ public class Catchword extends JPanel implements ActionListener {
 		timerLabel = new JLabel("남은 시간: " + time + "초");
 		timerLabel.setFont(new Font("돋움", Font.BOLD, 22));
 		timerLabel.setForeground(Color.white);
-		timerLabel.setSize(width, 20);
-		timerLabel.setLocation(10, height - 60);
+		timerLabel.setSize(width, 30); // Label 사이즈 조정
+		timerLabel.setLocation(10, height - 70); // Label 위치 조정
 		add(timerLabel);
 
 		buttons = new JButton[Psize][Psize];
