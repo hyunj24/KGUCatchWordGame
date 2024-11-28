@@ -252,7 +252,7 @@ public class Catchword extends JPanel implements ActionListener {
 				buttons[i][j].setUI(new Button());
 			}
 		}
-		penButton = new JButton(pencilIcon); // 버튼에 열쇠 이미지 추가
+		penButton = new JButton(pencilIcon); // 버튼에 연필 이미지 추가
 		penButton.setBounds(getWidth() - 100, 20, 50, 50); // 우측 상단 위치
 		penButton.setBorder(BorderFactory.createEmptyBorder()); // 버튼 테두리 제거
 		penButton.setContentAreaFilled(false); // 배경 제거
@@ -260,7 +260,7 @@ public class Catchword extends JPanel implements ActionListener {
 
 		add(penButton); // 패널에 추가
 
-		swichButton = new JButton(swichIcon); // 버튼에 열쇠 이미지 추가
+		swichButton = new JButton(swichIcon); // 버튼에 스위치 이미지 추가
 		swichButton.setBounds(getWidth() - 100, 80, 50, 50); // 우측 상단 위치
 		swichButton.setBorder(BorderFactory.createEmptyBorder()); // 버튼 테두리 제거
 		swichButton.setContentAreaFilled(false); // 배경 제거
@@ -367,7 +367,7 @@ public class Catchword extends JPanel implements ActionListener {
          add(darkOverlay);
      }
 
-     // 화면 얼륨게 설정
+     // 화면 어둡게 설정
      private void turnOffLights() {
          darkOverlay.setVisible(true);
          // 모든 텍스트 보이지 않도록 보용
@@ -376,7 +376,7 @@ public class Catchword extends JPanel implements ActionListener {
          }
      }
 
-     // 화면 발게 설정
+     // 화면 밝게 설정
      private void turnOnLights() {
          darkOverlay.setVisible(false);
          for (JLabel label : targetLabels) {
