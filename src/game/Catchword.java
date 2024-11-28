@@ -160,6 +160,7 @@ public class Catchword extends JPanel implements ActionListener {
 		pauseButton.setIcon(pauseIcon);
 		pauseButton.setOpaque(false); 
 		pauseButton.setBorder(null);
+		pauseButton.setBackground(new Color(255,0,0,0));
 
 		//힌트 버튼
 		ImageIcon hintIcon = new ImageIcon("imgs/hint.png");
@@ -167,13 +168,14 @@ public class Catchword extends JPanel implements ActionListener {
 		hintButton.setIcon(hintIcon);
 		hintButton.setOpaque(false); 
 		hintButton.setBorder(null);
-
+		hintButton.setBackground(new Color(255,0,0,0));
 		//시간추가 버튼
 		ImageIcon addTimeIcon = new ImageIcon("imgs/addTime.png");
 		addTimeButton = new JButton();
 		addTimeButton.setIcon(addTimeIcon);
 		addTimeButton.setOpaque(false); 
 		addTimeButton.setBorder(null);
+		addTimeButton.setBackground(new Color(255,0,0,0));
 		
 		hintButton.setEnabled(selectedLevel >= 3 && !hintUsed);
 		addTimeButton.setEnabled(selectedLevel >= 3 && !hintUsed);
