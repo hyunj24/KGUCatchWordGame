@@ -153,17 +153,31 @@ public class Catchword extends JPanel implements ActionListener {
 			targetLabels.add(letterLabel);
 		}
 		topPanel.add(targetPanel, BorderLayout.CENTER);
+		
+		//일시정지 버튼
+		ImageIcon pauseIcon = new ImageIcon("imgs/pause.png");
+		pauseButton = new JButton();
+		pauseButton.setIcon(pauseIcon);
+		pauseButton.setOpaque(false); 
+		pauseButton.setBorder(null);
 
-		pauseButton = new JButton("일시정지");
-		hintButton = new JButton("힌트");
-		addTimeButton = new JButton("시간추가");
+		//힌트 버튼
+		ImageIcon hintIcon = new ImageIcon("imgs/hint.png");
+		hintButton = new JButton();
+		hintButton.setIcon(hintIcon);
+		hintButton.setOpaque(false); 
+		hintButton.setBorder(null);
 
+		//시간추가 버튼
+		ImageIcon addTimeIcon = new ImageIcon("imgs/addTime.png");
+		addTimeButton = new JButton();
+		addTimeButton.setIcon(addTimeIcon);
+		addTimeButton.setOpaque(false); 
+		addTimeButton.setBorder(null);
+		
 		hintButton.setEnabled(selectedLevel >= 3 && !hintUsed);
 		addTimeButton.setEnabled(selectedLevel >= 3 && !hintUsed);
 
-		pauseButton.setFont(new Font("돋움", Font.BOLD, 13));
-		hintButton.setFont(new Font("돋움", Font.BOLD, 13));
-		addTimeButton.setFont(new Font("돋움", Font.BOLD, 13));
 		Dimension buttonSize = new Dimension(90, 40);
 		pauseButton.setPreferredSize(buttonSize);
 		hintButton.setPreferredSize(buttonSize);
@@ -206,6 +220,7 @@ public class Catchword extends JPanel implements ActionListener {
 		buttonPanel.add(pauseButton);
 		buttonPanel.add(hintButton);
 		buttonPanel.add(addTimeButton);
+		
 		topPanel.add(buttonPanel, BorderLayout.SOUTH);
 
 		topPanel.setSize(width, height / 5);
@@ -408,7 +423,11 @@ public class Catchword extends JPanel implements ActionListener {
 		isPaused = !isPaused;
 		if (isPaused) {
 			timer.stop();
-			pauseButton.setText("다시 시작");
+			//pauseButton.setText("다시 시작");
+			ImageIcon returnIcon = new ImageIcon("imgs/return.png");
+			pauseButton.setIcon(returnIcon);
+			pauseButton.setOpaque(false); 
+			pauseButton.setBorder(null);
 
 			JLabel pauseMessage = new JLabel("일시정지 중");
 			pauseMessage.setFont(new Font("돋움", Font.BOLD, 40));
@@ -431,7 +450,7 @@ public class Catchword extends JPanel implements ActionListener {
 		isPaused = false;
 		enableButton();
 		pauseButton.setEnabled(false);
-		pauseButton.setText("일시정지");
+		//pauseButton.setText("일시정지");
 
 		currentWordIndex = random.nextInt(words.size());
 		targetWord = words.get(currentWordIndex);
