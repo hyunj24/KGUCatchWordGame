@@ -78,7 +78,8 @@ public class Catchword extends JPanel implements ActionListener {
 	private Timer lightTimer;
 
 	private static final String[] EXTRA_CHARS = { "가", "나", "다", "라", "마", "바", "사", "아", "자", "차", "카", "타", "파", "하",
-			"강", "난", "당", "락", "만", "방", "산", "알", "장", "착", "칼", "탕", "팔", "한" };
+			"강", "난", "당", "락", "만", "방", "산", "알", "장", "착", "칼", "탕", "팔", "한", "병", "리", "남", "한", "채", "도", "유",
+			"시", "계", "풀", "물", "고", "노", "또", "로", "모", "보", "소", "오", "조", "초", "코", "토", "포", "호"};
 
 	private static Difficulty[] difficulties = { new Difficulty(60, 3, 5, 1, 0, 3), new Difficulty(50, 4, 5, 2, 0, 3),
 			new Difficulty(40, 5, 5, 3, 3, 3), new Difficulty(30, 6, 5, 4, 4, 4), new Difficulty(30, 7, 5, 5, 5, 4) };
@@ -789,7 +790,18 @@ public class Catchword extends JPanel implements ActionListener {
 		finalScore = roundScore + timeScore;
 
 		// 플레이어 기록 업데이트
-		r.updateBestScoreAndLevel(finalScore, selectedLevel + 1);
+		if (finalScore > bestScore) { //점수가 올랐을 때
+			if ((selectedLevel + 1) >= bestLevel) { //레벨도 기존보다 높을 때
+				r.updateBestScoreAndLevel(finalScore, selectedLevel + 1); //점수, 레벨 모두 업데이트
+			}
+			else { 
+				if ((selectedLevel + 1) == bestLevel) // 점수는 올랐으나 레벨은 그대로일 때
+					r.updateBestScore(finalScore); // 점수만 업데이트
+				else r.updateBestScoreAndLevel(finalScore, (selectedLevel + 1)); // 점수는 올랐으나 레벨은 낮은 레벨일 때, 해당 점수를 딴 레벨을 넣어줘야 하므로 둘다 업뎃
+			}
+		} else if ((finalScore == bestScore) && (selectedLevel + 1) > bestLevel) { //점수는 같은데 레벨만 올랐을 때
+			r.updateBestScoreLevel(selectedLevel + 1); //레벨만 업데이트
+		}
 
 		ScorePanel scorePanel = new ScorePanel(time, finalScore, selectedLevel + 1, roundsCompleted, bestScore,
 				bestLevel);

@@ -43,7 +43,7 @@ public class PlayerRecord {
     }
     
     // 점수 업데이트 (최고 점수만 갱신)
-    /*public void updateBestScore(int finalScore) {
+    public void updateBestScore(int finalScore) {
         if (finalScore > bestScore) {
             bestScore = finalScore;
         }
@@ -54,7 +54,7 @@ public class PlayerRecord {
         if (level > bestScoreLevel) {
             bestScoreLevel = level;
         }
-    }*/
+    }
 
     // 점수와 레벨 동시에 업데이트
     public void updateBestScoreAndLevel(int finalScore, int selectedLevel) {

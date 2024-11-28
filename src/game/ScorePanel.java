@@ -5,7 +5,13 @@ import javax.swing.*;
 import main.MainFrame;
 
 public class ScorePanel extends JPanel {
+	Image gameBackGround = new ImageIcon("imgs/gameWindow.jpg").getImage();
 	private boolean transitionInProgress = false;
+	
+	public void paintComponent(Graphics g) {
+		super.paintComponent(g);
+		g.drawImage(gameBackGround, 0, 0, getWidth(), getHeight(), this);
+	}
 
 	public ScorePanel(int time, int finalScore, int difficultyScore, int roundsCompleted, int bestScore,
 			int bestLevel) {
@@ -16,10 +22,12 @@ public class ScorePanel extends JPanel {
 		add(titleLabel, BorderLayout.NORTH);
 
 		// 신기록 여부 확인
-		boolean isNewRecord = bestScore <= finalScore && bestLevel <= difficultyScore;
+		boolean isNewRecord = (bestScore < finalScore) || 
+				((finalScore == bestScore) && difficultyScore > bestLevel); // 점수를 갱신했거나, 점수는 같아도 레벨을 갱신했다면 true
 
 		// 중앙 패널 생성 및 조건에 따라 다르게 구성
 		JPanel centerPanel = new JPanel();
+		centerPanel.setOpaque(false); // 배경 투명 설정
 		if (isNewRecord) {
 			// 신기록일 경우: 3줄 레이아웃 사용
 			centerPanel.setLayout(new GridLayout(3, 1));
@@ -28,11 +36,11 @@ public class ScorePanel extends JPanel {
 			String scoreMessage = String.format("<html>맞춘 문제 수: %d개<br><br>남은시간: %d초<br><br>기본 점수: %d</html>",
 					roundsCompleted, time, (roundsCompleted * difficultyScore));
 			JLabel scoreLabel = new JLabel(scoreMessage, SwingConstants.CENTER);
-			scoreLabel.setFont(new Font("돋움", Font.PLAIN, 18));
+			scoreLabel.setFont(new Font("돋움", Font.PLAIN, 25));
 			centerPanel.add(scoreLabel);
 
 			// 신기록 메시지 라벨
-			JLabel recordLabel = new JLabel("신기록입니다!", SwingConstants.CENTER);
+			JLabel recordLabel = new JLabel("신기록입니다! 랭킹을 확인하세요", SwingConstants.CENTER);
 			recordLabel.setFont(new Font("돋움", Font.BOLD, 35));
 			recordLabel.setForeground(Color.BLUE);
 			centerPanel.add(recordLabel);
@@ -46,7 +54,7 @@ public class ScorePanel extends JPanel {
 
 			// 최종 점수 라벨
 			JLabel finalScoreLabel = new JLabel("최종 점수: " + finalScore + "점", SwingConstants.CENTER);
-			finalScoreLabel.setFont(new Font("돋움", Font.PLAIN, 18));
+			finalScoreLabel.setFont(new Font("돋움", Font.PLAIN, 25));
 			centerPanel.add(finalScoreLabel);
 
 			// 최종 점수 애니메이션 추가
@@ -59,12 +67,12 @@ public class ScorePanel extends JPanel {
 			String scoreMessage = String.format("<html>맞춘 문제 수: %d개<br><br>남은시간: %d초<br><br>기본 점수: %d</html>",
 					roundsCompleted, time, (roundsCompleted * difficultyScore));
 			JLabel scoreLabel = new JLabel(scoreMessage, SwingConstants.CENTER);
-			scoreLabel.setFont(new Font("돋움", Font.PLAIN, 18));
+			scoreLabel.setFont(new Font("돋움", Font.PLAIN, 25));
 			centerPanel.add(scoreLabel);
 
 			// 최종 점수 라벨
 			JLabel finalScoreLabel = new JLabel("최종 점수: " + finalScore + "점", SwingConstants.CENTER);
-			finalScoreLabel.setFont(new Font("돋움", Font.PLAIN, 18));
+			finalScoreLabel.setFont(new Font("돋움", Font.PLAIN, 25));
 			centerPanel.add(finalScoreLabel);
 
 			// 최종 점수 애니메이션 추가
@@ -75,7 +83,7 @@ public class ScorePanel extends JPanel {
 
 		// 하단 버튼
 		JButton backButton = new JButton("메인 메뉴로 돌아가기");
-		backButton.setFont(new Font("돋움", Font.PLAIN, 16));
+		backButton.setFont(new Font("돋움", Font.PLAIN, 25));
 		backButton.addActionListener(e -> {
 			if (transitionInProgress)
 				return;
