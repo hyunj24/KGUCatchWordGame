@@ -172,21 +172,6 @@ public class MainMenu {
 			}
 		};
 
-		/*
-		 * JLabel userInfoLabel = new JLabel("사용자 정보", SwingConstants.CENTER);
-		 * userInfoLabel.setFont(new Font("돋움", Font.BOLD, 24));
-		 * userInfoLabel.setSize(200, 50);
-		 * 
-		 * JLabel userIdLabel = new JLabel(id, SwingConstants.CENTER);
-		 * userIdLabel.setFont(new Font("돋움", Font.BOLD, 24));
-		 * userIdLabel.setSize(200,50);
-		 * 
-		 * JLabel userScoreLabel = new JLabel(score, SwingConstants.CENTER);
-		 * userScoreLabel.setFont(new Font("돋움", Font.BOLD, 24));
-		 * userScoreLabel.setSize(200, 50); // JLabel userRankLabel = new JLabel(rank,
-		 * SwingConstants.CENTER);
-		 */
-
 		JLabel userInfoLabel = new JLabel("<html>"
 				+ "<div style='font-size:24px; font-weight:bold; padding-bottom:10px; text-align:center;'>사용자 정보</div>"
 				+ "<div style='font-size:24px; font-weight:bold; padding-bottom:10px; text-align:center;'>" + id
@@ -224,32 +209,30 @@ public class MainMenu {
 		return userInfoPanel;
 	}
 
-	// 랭킹 창 (수정 요청)
-	public JPanel RankingPanel() { 
+	// 랭킹 창
+	public JPanel RankingPanel() {
+		// 패널 생성
 		JPanel rank = new JPanel() {
 			protected void paintComponent(Graphics g) {
-				Image background = new ImageIcon("imgs/Login.jpg").getImage();
+				Image background = new ImageIcon("imgs/Login.jpg").getImage(); // 배경 이미지
 				g.drawImage(background, 0, 0, getWidth(), getHeight(), this);
 				setOpaque(false);
-
 				super.paintComponent(g);
 			}
 		};
-		rank.setLayout(new BorderLayout(10, 10)); // 상하좌우 여백 추가
-
+		rank.setLayout(new BorderLayout(10, 10)); // 여백 추가
+	
+		// 상단 라벨 (제목)
 		JLabel rankingLabel = new JLabel("사용자 랭킹", SwingConstants.CENTER);
-
-		// 랭킹을 보여줄 텍스트 영역
-		JTextArea rankingArea = new JTextArea();
-		rankingArea.setEditable(false);
-		rankingArea.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10)); // 내부 여백 추가
-
+		rankingLabel.setFont(new Font("Monospaced", Font.BOLD, 36)); // 큰 폰트
+		rankingLabel.setForeground(Color.BLACK); // 텍스트 색상
+	
 		// 사용자 랭킹 정렬
 		ArrayList<PlayerRecord> sortedRecords = new ArrayList<>(GameManager.recordList);
-
+	
 		// 점수와 레벨이 0인 기록을 제외
 		sortedRecords.removeIf(record -> record.getBestScore() == 0 && record.getBestScoreLevel() == 0);
-
+	
 		// 점수와 레벨 기준으로 정렬
 		sortedRecords.sort((r1, r2) -> {
 			if (r2.getBestScore() != r1.getBestScore()) {
@@ -258,31 +241,41 @@ public class MainMenu {
 				return r2.getBestScoreLevel() - r1.getBestScoreLevel(); // 동점이면 레벨 높은 순으로
 			}
 		});
-
-		// 정렬된 결과를 출력
-		StringBuilder rankingText = new StringBuilder("순위\tID\t점수\t레벨\n");
+	
+		// 랭킹 내용을 HTML로 작성
+		StringBuilder rankingHtml = new StringBuilder("<html><div style='font-size:18px; text-align:center;'>");
+		rankingHtml.append("<b>순위&nbsp;&nbsp;&nbsp;ID&nbsp;&nbsp;&nbsp;점수&nbsp;&nbsp;&nbsp;레벨</b><br/>");
 		int rankCounter = 1;
 		for (PlayerRecord record : sortedRecords) {
-			rankingText.append(rankCounter++).append("\t").append(record.getPlayerId()).append("\t")
-					.append(record.getBestScore()).append("\t").append(record.getBestScoreLevel()).append("\n");
+			rankingHtml.append(String.format("%d&nbsp;&nbsp;&nbsp;%s&nbsp;&nbsp;&nbsp;%d&nbsp;&nbsp;&nbsp;%d<br/>",
+					rankCounter++, record.getPlayerId(), record.getBestScore(), record.getBestScoreLevel()));
 		}
-		rankingArea.setText(rankingText.toString());
-
-		JScrollPane scrollPane = new JScrollPane(rankingArea);
-		scrollPane.setBorder(BorderFactory.createTitledBorder("")); // 경계선 제거
-
-		// 뒤로가기 버튼
+		rankingHtml.append("</div></html>");
+	
+		// 랭킹 내용을 포함한 라벨 생성
+		JLabel rankingContentLabel = new JLabel(rankingHtml.toString(), SwingConstants.CENTER);
+		rankingContentLabel.setFont(new Font("Monospaced", Font.PLAIN, 20)); // 폰트 크기 조정
+		rankingContentLabel.setForeground(Color.BLACK); // 텍스트 색상
+		rankingContentLabel.setOpaque(false); // 배경 투명
+	
+		// 랭킹 내용을 스크롤 가능하게 설정
+		JScrollPane scrollPane = new JScrollPane(rankingContentLabel);
+		scrollPane.setOpaque(false);
+		scrollPane.getViewport().setOpaque(false); // 스크롤 영역 투명
+		scrollPane.setBorder(BorderFactory.createEmptyBorder()); // 경계선 제거
+	
+		// 하단 버튼 (뒤로가기)
 		JButton backButton = backButton();
-
-		// 버튼과 텍스트 영역의 배치
-		JPanel bottomPanel = new JPanel();
-		bottomPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 10));
+	
+		JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
+		bottomPanel.setOpaque(false); // 배경 투명
 		bottomPanel.add(backButton);
-
-		rank.add(rankingLabel, BorderLayout.NORTH);
-		rank.add(scrollPane, BorderLayout.CENTER);
-		rank.add(bottomPanel, BorderLayout.SOUTH);
-
+	
+		// 패널 구성
+		rank.add(rankingLabel, BorderLayout.NORTH); // 상단 제목
+		rank.add(scrollPane, BorderLayout.CENTER); // 중앙 랭킹 내용
+		rank.add(bottomPanel, BorderLayout.SOUTH); // 하단 버튼
+	
 		return rank;
 	}
 
