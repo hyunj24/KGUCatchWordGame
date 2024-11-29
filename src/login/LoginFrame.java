@@ -70,7 +70,8 @@ public class LoginFrame {
 		JPanel innerPanel = new JPanel(new GridLayout(4, 1));
 		innerPanel.setSize(new Dimension(width/2, height/2));
 		innerPanel.setLocation(width/2-innerPanel.getWidth()/2, height/2-innerPanel.getHeight()/2);
-		innerPanel.setBackground(new Color(135, 206, 235));
+		innerPanel.setBackground(new Color(0, 0, 0, 0));  // 투명한 배경색 (알파값이 0인 검은색)
+		innerPanel.setOpaque(false);  // 투명하게 설정
 		
 		JLabel title = new JLabel("로그인", JLabel.CENTER);
 		title.setFont(new Font("돋움", Font.BOLD, 24));
@@ -80,12 +81,14 @@ public class LoginFrame {
 		JLabel id = new JLabel("아이디: ");
 		id.setFont(new Font("돋움", Font.BOLD, 20)); // 폰트 설정 
 		JTextField idField = new JTextField(10);
-		idPanel.setBackground(new Color(135, 206, 235));
+		idPanel.setBackground(new Color(0, 0, 0, 0));  // 투명한 배경색 (알파값이 0인 검은색)
+		idPanel.setOpaque(false);  // 투명하게 설정
 		idPanel.add(id);
 		idPanel.add(idField);
 
 		JPanel pwPanel = new JPanel();
-		pwPanel.setBackground(new Color(135, 206, 235));
+		pwPanel.setBackground(new Color(0, 0, 0, 0));  // 투명한 배경색 (알파값이 0인 검은색)
+		pwPanel.setOpaque(false);  // 투명하게 설정
 		JLabel password = new JLabel("비밀번호: ");
 		password.setFont(new Font("돋움", Font.BOLD, 20)); // 폰트 설정 
 		JTextField pwField = new JTextField(10);  // 입력 필드의 가로 길이를 10으로 변경
@@ -94,11 +97,14 @@ public class LoginFrame {
 		pwPanel.add(pwField);
 
 		JPanel loginPanel = new JPanel();
-		loginPanel.setBackground(new Color(135, 206, 235));
+		loginPanel.setBackground(new Color(0, 0, 0, 0));  // 투명한 배경색 (알파값이 0인 검은색)
+		loginPanel.setOpaque(false);  // 투명하게 설정
 		JButton join = new JButton("회원가입");
 		join.setBackground(new Color(255, 255, 224));
+		join.setPreferredSize(new Dimension(130, 35)); 
 		JButton login = new JButton("확인");
 		login.setBackground(new Color(255, 255, 224));
+		login.setPreferredSize(new Dimension(130, 35)); 
 
 		join.addActionListener(new ActionListener() {
 			@Override
