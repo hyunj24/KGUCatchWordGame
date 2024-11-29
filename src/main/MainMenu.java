@@ -98,21 +98,26 @@ public class MainMenu {
 		});
 
 		gameModeButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				String[] options = { "1단계", "2단계", "3단계", "4단계", "5단계" };
-				int level = JOptionPane.showOptionDialog(mainApp, "난이도를 선택하세요:", "난이도 선택", JOptionPane.DEFAULT_OPTION,
-						JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
-				// 게임 모드 버튼 누르면 캐치워드 게임 시작
-				if (level >= 0) {
-					Catchword catchwordGame = new Catchword(level, r);
-					mainApp.setContentPane(catchwordGame); // 메인메뉴 화면을 게임 화면으로 변경
-					mainApp.revalidate();
-					mainApp.repaint();
-					mainApp.setResizable(false);
-				}
-			}
+		    @Override
+		    public void actionPerformed(ActionEvent e) {
+		        // 버튼 색상 변경 (JOptionPane)
+		        UIManager.put("Button.background", new Color(255, 255, 224)); // 버튼 배경 색상
+
+		        String[] options = { "1단계", "2단계", "3단계", "4단계", "5단계" };
+		        int level = JOptionPane.showOptionDialog(mainApp, "난이도를 선택하세요:", "난이도 선택", JOptionPane.DEFAULT_OPTION,
+		                JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
+
+		        // 게임 모드 버튼 누르면 캐치워드 게임 시작
+		        if (level >= 0) {
+		            Catchword catchwordGame = new Catchword(level, r);
+		            mainApp.setContentPane(catchwordGame); // 메인메뉴 화면을 게임 화면으로 변경
+		            mainApp.revalidate();
+		            mainApp.repaint();
+		            mainApp.setResizable(false);
+		        }
+		    }
 		});
+
 
 		explainGameButton.addActionListener(new ActionListener() {
 			@Override
@@ -124,18 +129,32 @@ public class MainMenu {
 		});
 
 		exitGameButton.addMouseListener(new java.awt.event.MouseAdapter() {
-			@Override
-			public void mouseClicked(java.awt.event.MouseEvent e) {
-				int confirm = JOptionPane.showConfirmDialog(mainApp, "게임을 종료하시겠습니까?", "게임 종료",
-						JOptionPane.YES_NO_OPTION);
-				if (confirm == JOptionPane.YES_OPTION) {
-					GameManager GM = new GameManager();
-					GM.updateRecordTxt(); // 기록 갱신
-					System.exit(0); // 프로그램 종료
-				}
-			}
+		    @Override
+		    public void mouseClicked(java.awt.event.MouseEvent e) {
+		        // 기존 Look and Feel을 저장
+		        Color originalColor = UIManager.getColor("Button.background");
 
+		        // 버튼의 배경색 변경
+		        UIManager.put("Button.background", new Color(255, 255, 224));
+
+		        // 확인 창 생성
+		        int confirm = JOptionPane.showConfirmDialog(mainApp, 
+		                "게임을 종료하시겠습니까?", 
+		                "게임 종료", 
+		                JOptionPane.YES_NO_OPTION);
+
+		        // 선택된 옵션에 따라 동작
+		        if (confirm == JOptionPane.YES_OPTION) {
+		            GameManager GM = new GameManager();
+		            GM.updateRecordTxt(); // 기록 갱신
+		            System.exit(0); // 프로그램 종료
+		        }
+
+		        // 변경한 색상을 원래대로 복원
+		        UIManager.put("Button.background", originalColor);
+		    }
 		});
+
 
 		main.add(userInfoButton);
 		main.add(rankingButton);
@@ -199,6 +218,9 @@ public class MainMenu {
 
 		JButton backButton = backButton();
 
+		logoutButton.setBackground(new Color(255, 255, 224));
+		backButton.setBackground(new Color(255, 255, 224));
+
 		JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
 		bottomPanel.setOpaque(false); // 배경 투명
 		bottomPanel.add(logoutButton);
@@ -213,100 +235,102 @@ public class MainMenu {
 	}
 
 	// 랭킹 창
-	public JPanel RankingPanel() {
-		// 패널 생성
-		JPanel rank = new JPanel() {
-			protected void paintComponent(Graphics g) {
-				Image background = new ImageIcon("imgs/Login.jpg").getImage(); // 배경 이미지
-				g.drawImage(background, 0, 0, getWidth(), getHeight(), this);
-				setOpaque(false);
-				super.paintComponent(g);
-			}
-		};
-		rank.setLayout(new BorderLayout(10, 10)); // 여백 추가
+		public JPanel RankingPanel() {
+			// 패널 생성
+			JPanel rank = new JPanel() {
+				protected void paintComponent(Graphics g) {
+					Image background = new ImageIcon("imgs/Login.jpg").getImage(); // 배경 이미지
+					g.drawImage(background, 0, 0, getWidth(), getHeight(), this);
+					setOpaque(false);
+					super.paintComponent(g);
+				}
+			};
+			rank.setLayout(new BorderLayout(10, 10)); // 여백 추가
 
-		// 상단 라벨 (제목)
-		JLabel rankingLabel = new JLabel("사용자 랭킹", SwingConstants.CENTER);
-		rankingLabel.setFont(new Font("Monospaced", Font.BOLD, 36)); // 큰 폰트
-		rankingLabel.setForeground(Color.BLACK); // 텍스트 색상
+			// 상단 라벨 (제목)
+			JLabel rankingLabel = new JLabel("사용자 랭킹", SwingConstants.CENTER);
+			rankingLabel.setFont(new Font("Monospaced", Font.BOLD, 36)); // 큰 폰트
+			rankingLabel.setForeground(Color.BLACK); // 텍스트 색상
 
-		// 사용자 랭킹 정렬
-		ArrayList<PlayerRecord> sortedRecords = new ArrayList<>(GameManager.recordList);
+			// 사용자 랭킹 정렬
+			ArrayList<PlayerRecord> sortedRecords = new ArrayList<>(GameManager.recordList);
 
-		// 점수와 레벨이 0인 기록을 제외
-		sortedRecords.removeIf(record -> record.getBestScore() == 0 && record.getBestScoreLevel() == 0);
+			// 점수와 레벨이 0인 기록을 제외
+			sortedRecords.removeIf(record -> record.getBestScore() == 0 && record.getBestScoreLevel() == 0);
 
-		// 점수와 레벨 기준으로 정렬
-		sortedRecords.sort((r1, r2) -> {
-			if (r2.getBestScore() != r1.getBestScore()) {
-				return r2.getBestScore() - r1.getBestScore(); // 점수 높은 순으로
-			} else {
-				return r2.getBestScoreLevel() - r1.getBestScoreLevel(); // 동점이면 레벨 높은 순으로
-			}
-		});
+			// 점수와 레벨 기준으로 정렬
+			sortedRecords.sort((r1, r2) -> {
+				if (r2.getBestScore() != r1.getBestScore()) {
+					return r2.getBestScore() - r1.getBestScore(); // 점수 높은 순으로
+				} else {
+					return r2.getBestScoreLevel() - r1.getBestScoreLevel(); // 동점이면 레벨 높은 순으로
+				}
+			});
 
-		// 랭킹 내용을 HTML로 작성
-		StringBuilder rankingHtml = new StringBuilder("<html>");
-		rankingHtml.append("<div style='text-align:center;'>");
-		rankingHtml.append(
-				"<table style='border-collapse:collapse; margin:0; font-size:18px; border-spacing:0; padding:0;'>");
+			// 랭킹 내용을 HTML로 작성
+			StringBuilder rankingHtml = new StringBuilder("<html>");
+			rankingHtml.append("<div style='text-align:center;'>");
+			rankingHtml.append(
+					"<table style='border-collapse:collapse; margin:0; font-size:18px; border-spacing:0; padding:0;'>");
 
-		// 테이블 헤더 추가
-		rankingHtml.append("<tr style='font-weight:bold; background-color:#f2f2f2;'>");
-		rankingHtml.append("<th style='padding:5px; border:1px solid black; margin:0; '>순위</th>");
-		rankingHtml.append("<th style='padding:5px; border:1px solid black; margin:0; '>ID</th>");
-		rankingHtml.append("<th style='padding:5px; border:1px solid black; margin:0; '>최고 점수</th>");
-		rankingHtml.append("<th style='padding:5px; border:1px solid black; margin:0; '>레벨</th>");
-		rankingHtml.append("</tr>");
-
-		// 각 플레이어의 데이터를 행으로 추가
-		int rankCounter = 1;
-		for (PlayerRecord record : sortedRecords) {
-			rankingHtml.append("<tr>");
-			rankingHtml.append(String.format(
-					"<td style='padding:5px; border:1px solid black; margin:0; text-align:center; '>%d</td>",
-					rankCounter++));
-			rankingHtml.append(String.format(
-					"<td style='padding:5px; border:1px solid black; margin:0; text-align:center; '>%s</td>",
-					record.getPlayerId()));
-			rankingHtml.append(String.format(
-					"<td style='padding:5px; border:1px solid black; margin:0; text-align:center; '>%d</td>",
-					record.getBestScore()));
-			rankingHtml.append(String.format(
-					"<td style='padding:5px; border:1px solid black; margin:0; text-align:center; '>%d</td>",
-					record.getBestScoreLevel()));
+			// 테이블 헤더 추가
+			rankingHtml.append("<tr style='font-weight:bold; background-color:#f2f2f2;'>");
+			rankingHtml.append("<th style='padding:5px; border:1px solid black; margin:0; '>순위</th>");
+			rankingHtml.append("<th style='padding:5px; border:1px solid black; margin:0; '>ID</th>");
+			rankingHtml.append("<th style='padding:5px; border:1px solid black; margin:0; '>최고 점수</th>");
+			rankingHtml.append("<th style='padding:5px; border:1px solid black; margin:0; '>레벨</th>");
 			rankingHtml.append("</tr>");
+
+			// 각 플레이어의 데이터를 행으로 추가
+			int rankCounter = 1;
+			for (PlayerRecord record : sortedRecords) {
+				rankingHtml.append("<tr>");
+				rankingHtml.append(String.format(
+						"<td style='padding:5px; border:1px solid black; margin:0; text-align:center; '>%d</td>",
+						rankCounter++));
+				rankingHtml.append(String.format(
+						"<td style='padding:5px; border:1px solid black; margin:0; text-align:center; '>%s</td>",
+						record.getPlayerId()));
+				rankingHtml.append(String.format(
+						"<td style='padding:5px; border:1px solid black; margin:0; text-align:center; '>%d</td>",
+						record.getBestScore()));
+				rankingHtml.append(String.format(
+						"<td style='padding:5px; border:1px solid black; margin:0; text-align:center; '>%d</td>",
+						record.getBestScoreLevel()));
+				rankingHtml.append("</tr>");
+			}
+
+			rankingHtml.append("</table>");
+			rankingHtml.append("</div></html>");
+
+			// 랭킹 내용을 포함한 라벨 생성
+			JLabel rankingContentLabel = new JLabel(rankingHtml.toString(), SwingConstants.CENTER);
+			rankingContentLabel.setFont(new Font("Monospaced", Font.PLAIN, 20)); // 폰트 크기 조정
+			rankingContentLabel.setForeground(Color.BLACK); // 텍스트 색상
+			rankingContentLabel.setOpaque(false); // 배경 투명
+
+			// 랭킹 내용을 스크롤 가능하게 설정
+			JScrollPane scrollPane = new JScrollPane(rankingContentLabel);
+			scrollPane.setOpaque(false);
+			scrollPane.getViewport().setOpaque(false); // 스크롤 영역 투명
+			scrollPane.setBorder(BorderFactory.createEmptyBorder()); // 경계선 제거
+
+			// 하단 버튼 (뒤로가기)
+			JButton backButton = backButton();
+			backButton.setBackground(new Color(255, 255, 224));
+
+			JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
+			bottomPanel.setOpaque(false); // 배경 투명
+			bottomPanel.add(backButton);
+
+			// 패널 구성
+			rank.add(rankingLabel, BorderLayout.NORTH); // 상단 제목
+			rank.add(scrollPane, BorderLayout.CENTER); // 중앙 랭킹 내용
+			rank.add(bottomPanel, BorderLayout.SOUTH); // 하단 버튼
+
+			return rank;
 		}
 
-		rankingHtml.append("</table>");
-		rankingHtml.append("</div></html>");
-
-		// 랭킹 내용을 포함한 라벨 생성
-		JLabel rankingContentLabel = new JLabel(rankingHtml.toString(), SwingConstants.CENTER);
-		rankingContentLabel.setFont(new Font("Monospaced", Font.PLAIN, 20)); // 폰트 크기 조정
-		rankingContentLabel.setForeground(Color.BLACK); // 텍스트 색상
-		rankingContentLabel.setOpaque(false); // 배경 투명
-
-		// 랭킹 내용을 스크롤 가능하게 설정
-		JScrollPane scrollPane = new JScrollPane(rankingContentLabel);
-		scrollPane.setOpaque(false);
-		scrollPane.getViewport().setOpaque(false); // 스크롤 영역 투명
-		scrollPane.setBorder(BorderFactory.createEmptyBorder()); // 경계선 제거
-
-		// 하단 버튼 (뒤로가기)
-		JButton backButton = backButton();
-
-		JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
-		bottomPanel.setOpaque(false); // 배경 투명
-		bottomPanel.add(backButton);
-
-		// 패널 구성
-		rank.add(rankingLabel, BorderLayout.NORTH); // 상단 제목
-		rank.add(scrollPane, BorderLayout.CENTER); // 중앙 랭킹 내용
-		rank.add(bottomPanel, BorderLayout.SOUTH); // 하단 버튼
-
-		return rank;
-	}
 
 	// 게임 설명 창
 	public JPanel ExplainGamePanel() {
@@ -337,12 +361,18 @@ public class MainMenu {
 				+ "<br>게임 종료 후 최종 점수와 함께 여러분의 최고 점수가 갱신됩니다. 친구들과 점수를 비교하며 최고 기록을 세워보세요!" + "</html>",
 				SwingConstants.CENTER);
 
-		explainLabel.setFont(new Font("돋음", Font.BOLD, 17));
+
+		explainLabel.setFont(new Font("돋음", Font.BOLD, 15));
 
 		JButton backButton = backButton();
+		backButton.setBackground(new Color(255, 255, 224));
+
+		JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
+		bottomPanel.setOpaque(false); // 배경 투명
+		bottomPanel.add(backButton);
 
 		explain.add(explainLabel, BorderLayout.CENTER);
-		explain.add(backButton, BorderLayout.SOUTH);
+		explain.add(bottomPanel, BorderLayout.SOUTH); // 하단 버튼
 
 		return explain;
 	}
