@@ -85,8 +85,6 @@ public class LoginFrame {
 		pwPanel.setBackground(new Color(135, 206, 235));
 		JLabel password = new JLabel("비밀번호 ");
 		JTextField pwField = new JTextField(10);  // 입력 필드의 가로 길이를 10으로 변경
-		//pwField.setBackground(Color.white);  // 입력 필드의 배경색을 흰색으로 변경
-		//pwField.setBorder(new LineBorder(Color.black));  // 입력 필드의 테두리를 검은색 선으로 변경
 		
 		pwPanel.add(password);
 		pwPanel.add(pwField);

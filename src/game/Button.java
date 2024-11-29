@@ -13,13 +13,6 @@ public class Button extends BasicButtonUI {
         b.setOpaque(false);  // 버튼의 배경색을 투명하게 설정
         b.setBackground(new Color(255,0,0,0));
         
-        // 버튼의 모양과 배경 색상 설정
-       // g2.setColor(new Color(8, 136, 248));
-        
-        //그라데이션 인데 해보고 괜찮은거찾기
-        //GradientPaint gradient = new GradientPaint(0, 0, Color.blue, 0, b.getHeight(), Color.LIGHT_GRAY);
-        //g2.setPaint(gradient);
-        //g2.fillRoundRect(0, 0, b.getWidth(), b.getHeight(), 40, 40);
         //버튼에 이미지 입히기
         Image brick=new ImageIcon("imgs/brick.png").getImage();
         g2.drawImage(brick, 0, 0, b.getWidth(), b.getHeight(), b);

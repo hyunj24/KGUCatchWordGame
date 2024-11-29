@@ -62,9 +62,6 @@ public class PlayerRecord {
             bestScore = finalScore;
             bestScoreLevel = selectedLevel;
         }
-        /*if (level > bestScoreLevel) {
-            bestScoreLevel = level;
-        }*/
     }
     
 }

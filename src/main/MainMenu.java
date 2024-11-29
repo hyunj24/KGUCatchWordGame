@@ -239,7 +239,7 @@ public class MainMenu {
 			// 패널 생성
 			JPanel rank = new JPanel() {
 				protected void paintComponent(Graphics g) {
-					Image background = new ImageIcon("imgs/Login.jpg").getImage(); // 배경 이미지
+					Image background = new ImageIcon("imgs/RankingGround.jpg").getImage(); // 배경 이미지
 					g.drawImage(background, 0, 0, getWidth(), getHeight(), this);
 					setOpaque(false);
 					super.paintComponent(g);
@@ -336,7 +336,7 @@ public class MainMenu {
 	public JPanel ExplainGamePanel() {
 		JPanel explain = new JPanel() {
 			protected void paintComponent(Graphics g) {
-				Image background = new ImageIcon("imgs/Login.jpg").getImage();
+				Image background = new ImageIcon("imgs/ExplainGround.jpg").getImage();
 				g.drawImage(background, 0, 0, getWidth(), getHeight(), this);
 				setOpaque(false);
 
@@ -352,8 +352,8 @@ public class MainMenu {
 				+ "틀릴 경우에는 벌칙으로 시간이 줄어들게 됩니다. 남은 시간 관리를 잘 해야 게임에서 승리할 수 있습니다!<br><br>" + "<b>라운드 진행:</b><br>"
 				+ "단어를 맞추면 다음 라운드로 이동하며, 게임은 총 5라운드로 구성됩니다.<br>" + "각 라운드에서 단어를 맞출 때마다 새로운 글자가 섞여 나타납니다.<br>"
 				+ "모든 라운드를 성공적으로 완료하거나 시간이 모두 소진될 때 게임이 종료됩니다.<br><br>" + "<b>아이템:</b><br>" 
-				+ "1~3단계까지는 일시정지 아이템을 사용할 수 있습니다! 그리고 4, 5단계에서는 일시정지 아이템 뿐만 아니라 '힌트' 아이템과 '시간추가' 아이템 중 하나를 사용할 수 있습니다."
-				+ " '힌트' 를 사용할 경우 지금 눌러야 할 버튼에 빨간 테두리가 나오며, '시간 추가' 아이템은 10초가 추가됩니다. 한 게임 당 둘 중 하나만 사용 가능하니 신중히 사용하세요!<br><br>"
+				+ "1~3단계까지는 일시정지 아이템을 사용할 수 있습니다!<br>" + "그리고 4, 5단계에서는 일시정지 아이템 뿐만 아니라 '힌트' 아이템과 '시간추가' 아이템 중 하나를 사용할 수 있습니다.<br>"
+				+ " '힌트' 를 사용할 경우 지금 눌러야 할 버튼에 빨간 테두리가 나오며, '시간 추가' 아이템은 10초가 추가됩니다.<br>" + "한 게임 당 둘 중 하나만 사용 가능하니 신중히 사용하세요!<br><br>"
 				+ "<b>장애물:</b><br>" + "3단계부터는 장애물이 있습니다. 5초에 한 번씩 다음 두 가지 장애물이 등장합니다.<br>1) 암전 - 배경이 어두워지며 목표 단어가 가려집니다. 우상단의 '스위치' 버튼을 누르면 다시 밝아질 수 있어요!"
 				+ "<br>2) 글자 가려짐 - 랜덤으로 세개의 버튼의 글자가 없어질 거예요. 그럴 땐 우상단의 연필 아이콘을 눌러보세요! 다시 글자가 등장합니다.<br><br>" 
 				+ "<b>점수 계산 및 종료:</b><br>"
@@ -362,7 +362,7 @@ public class MainMenu {
 				SwingConstants.CENTER);
 
 
-		explainLabel.setFont(new Font("돋음", Font.BOLD, 15));
+		explainLabel.setFont(new Font("돋음", Font.BOLD, 13));
 
 		JButton backButton = backButton();
 		backButton.setBackground(new Color(255, 255, 224));

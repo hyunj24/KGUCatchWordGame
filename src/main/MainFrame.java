@@ -14,8 +14,7 @@ public class MainFrame extends JFrame {
 
     public void setFrame() {
         //바꿔낄 패널들을 추가
-    	//JLabel imageLabel = new JLabel(new ImageIcon("imgs/gameWindow.jpg"));
-    	//mainPanel.add(imageLabel);
+    	
         mainPanel.add(menu.MainMenuPanel(), "MainMenuPanel");
         mainPanel.add(menu.UserInfoPanel(), "UserInfoPanel"); 
         mainPanel.add(menu.RankingPanel(), "RankingPanel");
@@ -23,6 +22,7 @@ public class MainFrame extends JFrame {
         mainPanel.add(menu.ExitGamePanel(), "ExitGamePanel");
 
         setSize(1280, 720);
+        setTitle("Catch Word!");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(null);
         setContentPane(mainPanel);

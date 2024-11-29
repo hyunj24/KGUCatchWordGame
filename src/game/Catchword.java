@@ -426,7 +426,6 @@ public class Catchword extends JPanel implements ActionListener {
 		isPaused = !isPaused;
 		if (isPaused) {
 			timer.stop();
-			//pauseButton.setText("다시 시작");
 			ImageIcon returnIcon = new ImageIcon("imgs/return.png");
 			pauseButton.setIcon(returnIcon);
 			pauseButton.setOpaque(false); 
