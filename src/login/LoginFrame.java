@@ -5,6 +5,7 @@ import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.Frame;
 import java.awt.Graphics;
 import java.awt.GridLayout;
@@ -72,10 +73,12 @@ public class LoginFrame {
 		innerPanel.setBackground(new Color(135, 206, 235));
 		
 		JLabel title = new JLabel("로그인", JLabel.CENTER);
+		title.setFont(new Font("돋움", Font.BOLD, 24));
 		
 		JPanel idPanel = new JPanel();
 		
-		JLabel id = new JLabel("아이디 ");
+		JLabel id = new JLabel("아이디: ");
+		id.setFont(new Font("돋움", Font.BOLD, 20)); // 폰트 설정 
 		JTextField idField = new JTextField(10);
 		idPanel.setBackground(new Color(135, 206, 235));
 		idPanel.add(id);
@@ -83,7 +86,8 @@ public class LoginFrame {
 
 		JPanel pwPanel = new JPanel();
 		pwPanel.setBackground(new Color(135, 206, 235));
-		JLabel password = new JLabel("비밀번호 ");
+		JLabel password = new JLabel("비밀번호: ");
+		password.setFont(new Font("돋움", Font.BOLD, 20)); // 폰트 설정 
 		JTextField pwField = new JTextField(10);  // 입력 필드의 가로 길이를 10으로 변경
 		
 		pwPanel.add(password);
