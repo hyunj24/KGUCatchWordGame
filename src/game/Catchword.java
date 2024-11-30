@@ -609,9 +609,15 @@ public class Catchword extends JPanel implements ActionListener {
 
 	private void penaltyTime(int minusTime) {
 		time -= minusTime;
-		if (time < 0) {
-			time = 0;
-		}
+		if (time <= 0) { // 남은 시간이 0 이하로 내려가면
+	        time = 0; // 남은 시간을 0으로 설정
+	        timeBar.setValue(time);
+	        timeBar.setString("남은 시간: 0초");
+	        timer.stop(); // 타이머 중지
+	        JOptionPane.showMessageDialog(this, "시간 초과! 게임이 종료되었습니다.");
+	        showFinalScore(totalScore); // 최종 점수 표시
+	        return;
+	    }
 		timeBar.setValue(time);
 
 		// 시간 변경 내용을 표시
