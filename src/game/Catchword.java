@@ -284,7 +284,7 @@ public class Catchword extends JPanel implements ActionListener {
 		if (selectedLevel < 2) {
 	        return; // 기능은 3, 4, 5 단계에서만 실행
 	    }
-	    Timer randomFeatureTimer = new Timer(5000, new ActionListener() {
+	    Timer randomFeatureTimer = new Timer(8000, new ActionListener() {
 	        @Override
 	        public void actionPerformed(ActionEvent e) {
 	            // 0 또는 1 중 하나를 랜덤으로 선택
@@ -374,6 +374,11 @@ public class Catchword extends JPanel implements ActionListener {
          for (JLabel label : targetLabels) {
              label.setForeground(new Color(0, 0, 0, 0));
          }
+         for (int i = 0; i < Psize; i++) {
+             for (int j = 0; j < Psize; j++) {
+                 buttons[i][j].setEnabled(false);
+             }
+         }
      }
 
      // 화면 밝게 설정
@@ -381,6 +386,19 @@ public class Catchword extends JPanel implements ActionListener {
          darkOverlay.setVisible(false);
          for (JLabel label : targetLabels) {
              label.setForeground(Color.BLACK); // 발게 설정시 무조건 표시
+         }
+         for (int i = 0; i < targetLabels.size(); i++) {
+             JLabel label = targetLabels.get(i);
+             if (i < currentIndex) {
+                 label.setForeground(Color.BLUE); // 이미 맞춘 글자는 파란색 유지
+             } else {
+                 label.setForeground(Color.BLACK); // 나머지는 검은색
+             }
+         }
+         for (int i = 0; i < Psize; i++) {
+             for (int j = 0; j < Psize; j++) {
+                 buttons[i][j].setEnabled(true);
+             }
          }
      }
 	 private void unlockAllButtons() {
