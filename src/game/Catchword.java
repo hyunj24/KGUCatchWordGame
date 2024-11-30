@@ -283,7 +283,7 @@ public class Catchword extends JPanel implements ActionListener {
 		if (selectedLevel < 2) {
 	        return; // 기능은 3, 4, 5 단계에서만 실행
 	    }
-	    Timer randomFeatureTimer = new Timer(5000, new ActionListener() {
+	    Timer randomFeatureTimer = new Timer(7000, new ActionListener() {
 	        @Override
 	        public void actionPerformed(ActionEvent e) {
 	            // 0 또는 1 중 하나를 랜덤으로 선택
