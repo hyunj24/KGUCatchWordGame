@@ -256,7 +256,7 @@ public class Catchword extends JPanel implements ActionListener {
 		penButton.setBounds(getWidth() - 100, 20, 50, 50); // 우측 상단 위치
 		penButton.setBorder(BorderFactory.createEmptyBorder()); // 버튼 테두리 제거
 		penButton.setContentAreaFilled(false); // 배경 제거
-		penButton.addActionListener(e -> unlockAllButtons()); // 클릭 시 동작 정의
+		penButton.addActionListener(e -> drawAllButtons()); // 클릭 시 동작 정의
 
 		add(penButton); // 패널에 추가
 
@@ -399,7 +399,7 @@ public class Catchword extends JPanel implements ActionListener {
              }
          }
      }
-	 private void unlockAllButtons() {
+	 private void drawAllButtons() {
 		    for (int i = 0; i < Psize; i++) {
 		        for (int j = 0; j < Psize; j++) {
 		            JButton button = buttons[i][j];
