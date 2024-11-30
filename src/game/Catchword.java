@@ -116,13 +116,12 @@ public class Catchword extends JPanel implements ActionListener {
 
 		Difficulty selectedDifficulty = difficulties[difficultyLevel];
 
-		time = 60;
-
 		MAX_ROUNDS = selectedDifficulty.numRounds;
 		score = selectedDifficulty.score;
 		plusTime = selectedDifficulty.plustime;
 		Psize = selectedDifficulty.Psize;
 		words = loadWordsWithLength(selectedDifficulty.wordLength);
+		time = selectedDifficulty.timeLimit;
 
 		currentWordIndex = random.nextInt(words.size());
 		targetWord = words.get(currentWordIndex);
@@ -576,7 +575,7 @@ public class Catchword extends JPanel implements ActionListener {
 				if (time == 0) {
 					timer.stop();
 					JOptionPane.showMessageDialog(Catchword.this, "시간 초과! 게임이 종료되었습니다.");
-					showFinalScore(totalScore);
+					showFinalScore();
 				}
 			}
 		});
@@ -613,7 +612,7 @@ public class Catchword extends JPanel implements ActionListener {
 	        timeBar.setString("남은 시간: 0초");
 	        timer.stop(); // 타이머 중지
 	        JOptionPane.showMessageDialog(this, "시간 초과! 게임이 종료되었습니다.");
-	        showFinalScore(totalScore); // 최종 점수 표시
+	        showFinalScore(); // 최종 점수 표시
 	        return;
 	    }
 		timeBar.setValue(time);
@@ -761,7 +760,7 @@ public class Catchword extends JPanel implements ActionListener {
 				if (roundsCompleted == MAX_ROUNDS) {
 					timer.stop();
 					// JOptionPane.showMessageDialog(this, "성공! 모든 단어를 맞췄습니다.");
-					showFinalScore(totalScore);
+					showFinalScore();
 					return;
 				}
 
@@ -809,7 +808,7 @@ public class Catchword extends JPanel implements ActionListener {
 		// shuffleButtons();
 	}
 
-	private void showFinalScore(int totalScore) {
+	private void showFinalScore() {
 		// 난이도별 1문제당 점수 설정 (5단계부터 1단계까지 점수 차이)
 		int[] difficultyScores = { 1, 2, 3, 4, 5 }; // 1단계 1점, 2단계 2점, ... 5단계 5점
 
