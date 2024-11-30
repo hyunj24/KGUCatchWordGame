@@ -284,7 +284,7 @@ public class Catchword extends JPanel implements ActionListener {
 		if (selectedLevel < 2) {
 	        return; // 기능은 3, 4, 5 단계에서만 실행
 	    }
-	    Timer randomFeatureTimer = new Timer(8000, new ActionListener() {
+	    Timer randomFeatureTimer = new Timer(5000, new ActionListener() {
 	        @Override
 	        public void actionPerformed(ActionEvent e) {
 	            // 0 또는 1 중 하나를 랜덤으로 선택
@@ -347,8 +347,6 @@ public class Catchword extends JPanel implements ActionListener {
 	    revalidate();
 	    repaint();
 	}
-
-	 private JButton switchButton;
 
     
      
@@ -659,6 +657,20 @@ public class Catchword extends JPanel implements ActionListener {
 		this.repaint();
 
 		updateProblemLabel(); // 각 라운드에서 문제 번호 업데이트
+		for (int i = 0; i < Psize; i++) {
+	        for (int j = 0; j < Psize; j++) {
+	            JButton button = buttons[i][j];
+	            if (button.getIcon() == lockIcon) {
+	                // 잠금 버튼이었던 경우 원래 텍스트 복원
+	                String originalText = (String) button.getClientProperty("originalText");
+	                if (originalText != null) {
+	                    button.setText(originalText);
+	                }
+	                button.setIcon(null); // 아이콘 제거
+	                button.setEnabled(true); // 버튼 활성화
+	            }
+	        }
+	    }
 		shuffleButtons();
 	}
 
@@ -677,6 +689,11 @@ public class Catchword extends JPanel implements ActionListener {
 		}
 
 		Collections.shuffle(chars);
+		for (char c : targetWord.toCharArray()) {
+	        if (!chars.contains(c)) {
+	            shuffleButtons();
+	        }
+	    }
 		int index = 0;
 		for (int i = 0; i < Psize; i++) {
 			for (int j = 0; j < Psize; j++) {
